@@ -1,8 +1,12 @@
-aws ecr create-repository <repo> --region <region>
-aws s3 mb <project>-deploy-bucket --region <region>
-aws elasticbeanstalk create-application --application-name <project> --region <region>
-aws elasticbeanstalk create-environment --application-name <project> \
-	--environment-name <project-env> \
-	--solution-stack-name 64bit Amazon Linux 2016.03 v2.1.6 running Docker 1.11.2 \
-	--region <region>
+CIUSER=ci
+ACCOUNTID=<account-id>
 
+# Create the CI user with appropricate permissions
+aws iam create-user --user-name $CIUSER
+aws iam attach-user-policy --user-name $CIUSER --policy-arn arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess
+aws iam attach-user-policy --user-name $CIUSER --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+aws iam create-policy --policy-name deploy-bucket-policy --policy-document file://bucket-policy.json
+aws iam attach-user-policy --user-name $CIUSER --policy-arn arn:aws:iam::$ACCOUNTID:policy/deploy-bucket-policy
+aws iam create-access-key --user-name $CIUSER > ci-access-key.json
+
+aws iam attach-role-policy --role-name aws-elasticbeanstalk-ec2-role --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
