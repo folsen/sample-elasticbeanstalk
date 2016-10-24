@@ -1,0 +1,10 @@
+FROM fpco/stack-run:latest
+
+RUN mkdir -p /app
+WORKDIR /app
+
+ADD sample-elasticbeanstalk /app
+
+EXPOSE 5000
+
+CMD ["/app/sample-elasticbeanstalk"]

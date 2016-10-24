@@ -1,0 +1,33 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+    - "~/.cabal"
+    - "~/.local"
+    - "~/.stack"
+    - ".stack-work"
+  pre:
+    - wget -q -O- https://s3.amazonaws.com/download.fpcomplete.com/ubuntu/fpco.key | sudo apt-key add -
+    - echo 'deb http://download.fpcomplete.com/ubuntu/trusty stable main'|sudo tee /etc/apt/sources.list.d/fpco.list
+    - sudo apt-get update
+    - sudo apt-get install -y stack
+    - pip install awscli
+  override:
+    - stack --no-terminal setup
+    - stack --no-terminal build --test --only-dependencies -j1
+
+test:
+  override:
+    - stack --no-terminal test
+
+deployment:
+  elasticbeanstalk:
+    branch: master
+    commands:
+      - stack --no-terminal install --local-bin-path .
+      - docker build --rm=false -t <account-id>.dkr.ecr.<region>.amazonaws.com/<repo>:$CIRCLE_SHA1 -f Dockerfile.deploy .
+      - ./deploy.sh $CIRCLE_SHA1
+
