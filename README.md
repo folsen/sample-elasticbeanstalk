@@ -1,4 +1,6 @@
 # How to set up this project
+1. Make sure you have the AWS CLI installed and configured with a user
+	 that has access to create buckets and configure IAM users.
 1. Create your Elastic Beanstalk application through the [web
 	 console](https://console.aws.amazon.com/elasticbeanstalk/home). This is
 	 necessary to create the default service and instance roles that we need to
