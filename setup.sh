@@ -1,6 +1,9 @@
 CIUSER=ci
 ACCOUNTID=<account-id>
 
+# Create ECR repo
+aws ecr create-repository <repo> --region <region>
+
 # Create the CI user with appropricate permissions
 aws iam create-user --user-name $CIUSER
 aws iam attach-user-policy --user-name $CIUSER --policy-arn arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess
