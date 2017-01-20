@@ -7,7 +7,7 @@
 	 configure later (`aws-elasticbeanstalk-ec2-role`). It's fine to launch
 	 your environment with the sample application to start.
 1. Replace `<account-id>`, `<region>`, `<repo>` and `<project>` in all
-	 the files with your AWS account id, the region you want to run in,
+	 the files with your AWS account id (without dashes!), the region you want to run in,
 	 what you want to name your ECR repo and what you named your project.
 	 This would perhaps be suitable to put into a cookiecutter template or
 	 such, but I felt that was a bit overkill.
